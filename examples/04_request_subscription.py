@@ -10,14 +10,20 @@ from pod_subscription import PodSubscription, \
 try:
     pod_subscription = PodSubscription(api_token=API_TOKEN, server_type=SERVER_MODE)
 
-    print(pod_subscription.request_subscription(subscription_plan_id=5969, user_id=USER_ID))
+    params = {
+        "call_url": "http://yahoo.com",
+        "redirect_url": "http://google.com",
+        "gateway": "PEP",
+    }
+
+    print(pod_subscription.request_subscription(subscription_plan_id=5970, user_id=12043))
 
     # OUTPUT
     # {
-    #   "id": 2551,
-    #   "creationDate": 1580738028017,
+    #   "id": 2612,
+    #   "creationDate": 1581748700491,
     #   "plan": {
-    #     "id": 5969,
+    #     "id": 5970,
     #     "typeCode": "SUBSCRIPTION_PLAN_TYPE_CASH",
     #     "price": 10,
     #     "name": "طرح تست پایتونی"
@@ -27,14 +33,14 @@ try:
     #   "notSettledUsedAmount": 0,
     #   "status": "SUBSCRIPTION_NOT_VERIFY",
     #   "invoiceSrv": {
-    #     "id": 64067,
+    #     "id": 65870,
     #     "payableAmount": 10,
-    #     "uniqueNumber": "3b63e2a516f4c6c5",
+    #     "uniqueNumber": "8cc1042e4dcb4b80",
     #     "description": "",
     #     "business": {
     #       "id": 7867,
     #       "name": "شرکت رضا",
-    #       "numOfProducts": 395,
+    #       "numOfProducts": 462,
     #       "rate": {
     #         "rate": 8,
     #         "rateCount": 1
@@ -42,13 +48,14 @@ try:
     #       "sheba": "640170000000000000000000"
     #     },
     #     "userSrv": {
-    #       "id": 16849,
-    #       "name": "رضا زارع",
-    #       "ssoId": "11923337",
+    #       "id": 12043,
+    #       "name": "احسان شکاری",
+    #       "ssoId": "6254762",
     #       "ssoIssuerCode": 1,
     #       "profileImage": "https://core.pod.ir:443/nzh/image/?imageId=..."
     #     }
-    #   }
+    #   },
+    #   "paymentLink": "https://sandbox.pod.ir:1033/v1/pbc/payInvoiceByUniqueNumber/?uniqueNumber=8cc1042e4dcb4b80&gateway=PEP&call_url=http://yahoo.com&redirect_url=http://google.com"
     # }
 
 

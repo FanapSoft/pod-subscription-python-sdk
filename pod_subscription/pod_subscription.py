@@ -2,6 +2,10 @@
 from os import path
 from pod_base import PodBase, calc_offset, ConfigException, InvalidDataException
 from .consts import SubscriptionPlanPaymentType
+try:
+    from urllib.parse import urlencode
+except ImportError:
+    from urllib import urlencode
 
 
 class PodSubscription(PodBase):
@@ -142,9 +146,36 @@ class PodSubscription(PodBase):
         kwargs["userId"] = user_id
 
         self._validate(kwargs, "requestSubscription")
-        return self._request.call(super(PodSubscription, self)
-                                  ._get_sc_product_settings("/nzh/biz/requestSubscription", method_type="post"),
-                                  params=kwargs, headers=self._get_headers(), **kwargs)
+        result = self._request.call(super(PodSubscription, self)
+                                    ._get_sc_product_settings("/nzh/biz/requestSubscription", method_type="post"),
+                                    params=kwargs, headers=self._get_headers(), **kwargs)
+        if "invoiceSrv" in result:
+            result["paymentLink"] = self.__generate_payment_link(result["invoiceSrv"]["uniqueNumber"], **kwargs)
+
+        return result
+
+    def __generate_payment_link(self, unique_number, **kwargs):
+        """
+        ایجاد لینک پرداخت فاکتور
+
+        :param str unique_number: کد یکتا فاکتور
+        :return: str
+        """
+        params = {
+            "uniqueNumber": unique_number
+        }
+
+        if "gateway" in kwargs:
+            params["gateway"] = kwargs.pop("gateway")
+
+        if "redirect_url" in kwargs:
+            params["redirectUri"] = kwargs.pop("redirect_url")
+
+        if "call_url" in kwargs:
+            params["callUri"] = kwargs.pop("call_url")
+
+        self._validate(params, "getPayInvoiceByUniqueNumberLink")
+        return "{}/v1/pbc/payInvoiceByUniqueNumber/?{}".format(self.__get_private_call_address(), urlencode(params))
 
     def confirm_subscription(self, subscription_id, code, **kwargs):
         """
