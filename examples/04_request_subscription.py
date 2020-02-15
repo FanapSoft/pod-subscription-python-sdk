@@ -16,7 +16,7 @@ try:
         "gateway": "PEP",
     }
 
-    print(pod_subscription.request_subscription(subscription_plan_id=5970, user_id=12043))
+    print(pod_subscription.request_subscription(subscription_plan_id=5970, user_id=USER_ID, **params))
 
     # OUTPUT
     # {
